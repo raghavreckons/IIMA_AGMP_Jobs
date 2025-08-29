@@ -6,7 +6,7 @@ let recruitersData = [];
 let shortlistedCandidates = new Set();
 let filteredAlumni = [];
 
-// Demo data initialization
+// Demo data initialization with IIM Ahmedabad alumni data
 const initializeData = () => {
     // Initialize alumni data from provided JSON
     alumniData = [
@@ -284,46 +284,46 @@ const initializeData = () => {
         }
     ];
 
-    // Initialize demo recruiters
+    // Initialize demo recruiters with professional organizations
     recruitersData = [
         {
             id: 1,
-            name: "John Smith",
+            name: "Rajesh Kumar",
             email: "recruiter@company.com",
             password: "recruiter123",
-            company: "Tech Innovations Corp",
+            company: "McKinsey & Company",
             status: "active"
         },
         {
             id: 2,
-            name: "Sarah Johnson",
-            email: "sarah.j@globaltech.com",
-            password: "sarah123",
-            company: "Global Tech Solutions",
+            name: "Priya Mehta",
+            email: "p.mehta@bcg.com",
+            password: "priya123",
+            company: "Boston Consulting Group",
             status: "active"
         },
         {
             id: 3,
-            name: "Michael Chen",
-            email: "m.chen@financeplus.com",
-            password: "michael123",
-            company: "Finance Plus Ltd",
+            name: "Amit Sharma",
+            email: "a.sharma@deloitte.com",
+            password: "amit123",
+            company: "Deloitte Consulting",
             status: "pending"
         },
         {
             id: 4,
-            name: "Lisa Rodriguez",
-            email: "lisa@consultingpro.com",
-            password: "lisa123",
-            company: "Consulting Pro",
+            name: "Neha Gupta",
+            email: "neha@tcs.com",
+            password: "neha123",
+            company: "Tata Consultancy Services",
             status: "active"
         },
         {
             id: 5,
-            name: "David Wilson",
-            email: "d.wilson@manufacturing.com",
-            password: "david123",
-            company: "Advanced Manufacturing",
+            name: "Rohit Agarwal",
+            email: "r.agarwal@infosys.com",
+            password: "rohit123",
+            company: "Infosys Limited",
             status: "inactive"
         }
     ];
@@ -332,28 +332,52 @@ const initializeData = () => {
     filteredAlumni = [...alumniData];
 };
 
-// Authentication Functions
-window.showLogin = (type) => {
+// Authentication Functions - Make them globally available
+function showLogin(type) {
+    console.log('showLogin called with type:', type); // Debug log
     const modal = document.getElementById('loginModal');
     const title = document.getElementById('loginTitle');
     const demoCredentials = document.getElementById('demoCredentials');
     
+    if (!modal || !title || !demoCredentials) {
+        console.error('Modal elements not found');
+        return;
+    }
+    
     if (type === 'admin') {
-        title.textContent = 'Admin Login';
-        demoCredentials.innerHTML = '<strong>Admin:</strong> admin@iima.ac.in / admin123';
+        title.textContent = 'Admin Login - IIM Ahmedabad';
+        demoCredentials.innerHTML = '<strong>Admin Credentials:</strong> admin@iima.ac.in / admin123';
     } else {
-        title.textContent = 'Recruiter Login';
-        demoCredentials.innerHTML = '<strong>Demo:</strong> recruiter@company.com / recruiter123';
+        title.textContent = 'Recruiter Login - IIM Ahmedabad';
+        demoCredentials.innerHTML = '<strong>Demo Credentials:</strong> recruiter@company.com / recruiter123';
     }
     
     modal.classList.remove('hidden');
-    document.getElementById('loginEmail').focus();
-};
+    const emailInput = document.getElementById('loginEmail');
+    if (emailInput) {
+        setTimeout(() => emailInput.focus(), 100);
+    }
+}
 
-const handleLogin = (e) => {
+// Make showLogin globally available
+window.showLogin = showLogin;
+
+function handleLogin(e) {
     e.preventDefault();
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
+    console.log('handleLogin called'); // Debug log
+    
+    const emailInput = document.getElementById('loginEmail');
+    const passwordInput = document.getElementById('loginPassword');
+    
+    if (!emailInput || !passwordInput) {
+        console.error('Login form elements not found');
+        return;
+    }
+    
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    
+    console.log('Login attempt:', email); // Debug log
     
     // Admin login
     if (email === 'admin@iima.ac.in' && password === 'admin123') {
@@ -368,39 +392,54 @@ const handleLogin = (e) => {
             currentUser = { type: 'recruiter', email: email, data: recruiter };
             showPage('recruiterDashboard');
             initializeRecruiterDashboard();
+        } else if (recruiter && recruiter.status !== 'active') {
+            alert('Your account is pending approval or has been deactivated. Please contact the administrator.');
+            return;
         } else {
-            alert('Invalid credentials or account not approved');
+            alert('Invalid credentials. Please check your email and password.');
             return;
         }
     }
     
     closeModal();
     document.getElementById('loginForm').reset();
-};
+}
 
-window.logout = () => {
-    currentUser = null;
-    showPage('landingPage');
-    // Reset any active states
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.admin-section').forEach(section => section.classList.remove('active'));
-    document.querySelectorAll('.recruiter-section').forEach(section => section.classList.remove('active'));
-};
+function logout() {
+    if (confirm('Are you sure you want to logout?')) {
+        currentUser = null;
+        shortlistedCandidates.clear();
+        showPage('landingPage');
+        // Reset any active states
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.admin-section').forEach(section => section.classList.remove('active'));
+        document.querySelectorAll('.recruiter-section').forEach(section => section.classList.remove('active'));
+    }
+}
+
+// Make logout globally available
+window.logout = logout;
 
 // Page Navigation
-const showPage = (pageId) => {
+function showPage(pageId) {
     document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-    document.getElementById(pageId).classList.add('active');
-    currentPage = pageId;
-};
+    const targetPage = document.getElementById(pageId);
+    if (targetPage) {
+        targetPage.classList.add('active');
+        currentPage = pageId;
+    }
+}
 
 // Modal Management
-window.closeModal = () => {
+function closeModal() {
     document.querySelectorAll('.modal').forEach(modal => modal.classList.add('hidden'));
-};
+}
+
+// Make closeModal globally available
+window.closeModal = closeModal;
 
 // Admin Dashboard Functions
-window.showAdminSection = (sectionId) => {
+function showAdminSection(sectionId) {
     // Update navigation
     document.querySelectorAll('.admin-nav .nav-btn').forEach(btn => btn.classList.remove('active'));
     event.target.classList.add('active');
@@ -413,7 +452,7 @@ window.showAdminSection = (sectionId) => {
     switch(sectionId) {
         case 'dashboard':
             loadDashboardStats();
-            loadCharts();
+            setTimeout(loadCharts, 100);
             break;
         case 'profiles':
             loadProfilesTable();
@@ -422,9 +461,12 @@ window.showAdminSection = (sectionId) => {
             loadRecruitersTable();
             break;
     }
-};
+}
 
-const initializeAdminDashboard = () => {
+// Make showAdminSection globally available
+window.showAdminSection = showAdminSection;
+
+function initializeAdminDashboard() {
     // Set first nav button as active
     const firstNavBtn = document.querySelector('.admin-nav .nav-btn');
     if (firstNavBtn) {
@@ -436,28 +478,38 @@ const initializeAdminDashboard = () => {
     document.getElementById('adminDashboardSection').classList.add('active');
     
     loadDashboardStats();
-    setTimeout(loadCharts, 100); // Delay to ensure DOM is ready
-};
+    setTimeout(loadCharts, 200); // Delay to ensure DOM is ready
+}
 
-const loadDashboardStats = () => {
-    document.getElementById('totalAlumni').textContent = alumniData.length;
-    document.getElementById('totalRecruiters').textContent = recruitersData.filter(r => r.status === 'active').length;
+function loadDashboardStats() {
+    const totalAlumniEl = document.getElementById('totalAlumni');
+    const totalRecruitersEl = document.getElementById('totalRecruiters');
+    const totalFunctionsEl = document.getElementById('totalFunctions');
+    const totalIndustriesEl = document.getElementById('totalIndustries');
+    
+    if (totalAlumniEl) totalAlumniEl.textContent = alumniData.length;
+    if (totalRecruitersEl) totalRecruitersEl.textContent = recruitersData.filter(r => r.status === 'active').length;
     
     const functionalAreas = [...new Set(alumniData.map(a => a.functional_area))];
     const industries = [...new Set(alumniData.map(a => a.industry))];
     
-    document.getElementById('totalFunctions').textContent = functionalAreas.length;
-    document.getElementById('totalIndustries').textContent = industries.length;
-};
+    if (totalFunctionsEl) totalFunctionsEl.textContent = functionalAreas.length;
+    if (totalIndustriesEl) totalIndustriesEl.textContent = industries.length;
+}
 
-const loadCharts = () => {
+function loadCharts() {
     loadFunctionalChart();
     loadExperienceChart();
-};
+}
 
-const loadFunctionalChart = () => {
+function loadFunctionalChart() {
     const ctx = document.getElementById('functionalChart');
     if (!ctx) return;
+    
+    // Clear any existing chart
+    if (Chart.getChart(ctx)) {
+        Chart.getChart(ctx).destroy();
+    }
     
     // Calculate functional area distribution
     const functionalCounts = {};
@@ -465,7 +517,8 @@ const loadFunctionalChart = () => {
         functionalCounts[alumni.functional_area] = (functionalCounts[alumni.functional_area] || 0) + 1;
     });
     
-    const colors = ['#1FB8CD', '#FFC185', '#B4413C', '#ECEBD5', '#5D878F', '#DB4545', '#D2BA4C', '#964325', '#944454'];
+    // IIM Ahmedabad color scheme
+    const colors = ['#1a365d', '#2c5282', '#3182ce', '#4299e1', '#63b3ed', '#90cdf4', '#bee3f8', '#e6fffa', '#f0fff4'];
     
     new Chart(ctx, {
         type: 'doughnut',
@@ -475,7 +528,8 @@ const loadFunctionalChart = () => {
                 data: Object.values(functionalCounts),
                 backgroundColor: colors.slice(0, Object.keys(functionalCounts).length),
                 borderWidth: 2,
-                borderColor: '#fff'
+                borderColor: '#ffffff',
+                hoverBorderWidth: 3
             }]
         },
         options: {
@@ -486,20 +540,32 @@ const loadFunctionalChart = () => {
                     position: 'bottom',
                     labels: {
                         usePointStyle: true,
-                        padding: 20,
+                        padding: 15,
                         font: {
-                            size: 12
+                            size: 11,
+                            family: 'FKGroteskNeue, Inter, sans-serif'
                         }
                     }
+                },
+                tooltip: {
+                    backgroundColor: '#1a365d',
+                    titleColor: '#ffffff',
+                    bodyColor: '#ffffff',
+                    cornerRadius: 8
                 }
             }
         }
     });
-};
+}
 
-const loadExperienceChart = () => {
+function loadExperienceChart() {
     const ctx = document.getElementById('experienceChart');
     if (!ctx) return;
+    
+    // Clear any existing chart
+    if (Chart.getChart(ctx)) {
+        Chart.getChart(ctx).destroy();
+    }
     
     // Calculate experience distribution
     const expCounts = {
@@ -525,9 +591,10 @@ const loadExperienceChart = () => {
             datasets: [{
                 label: 'Number of Alumni',
                 data: Object.values(expCounts),
-                backgroundColor: ['#1FB8CD', '#FFC185', '#B4413C'],
+                backgroundColor: ['#1a365d', '#2c5282', '#3182ce'],
                 borderWidth: 0,
-                borderRadius: 8
+                borderRadius: 6,
+                borderSkipped: false,
             }]
         },
         options: {
@@ -537,45 +604,83 @@ const loadExperienceChart = () => {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        stepSize: 1
+                        stepSize: 1,
+                        color: '#4a5568',
+                        font: {
+                            family: 'FKGroteskNeue, Inter, sans-serif'
+                        }
+                    },
+                    grid: {
+                        color: '#e2e8f0'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#4a5568',
+                        font: {
+                            family: 'FKGroteskNeue, Inter, sans-serif'
+                        }
+                    },
+                    grid: {
+                        display: false
                     }
                 }
             },
             plugins: {
                 legend: {
                     display: false
+                },
+                tooltip: {
+                    backgroundColor: '#1a365d',
+                    titleColor: '#ffffff',
+                    bodyColor: '#ffffff',
+                    cornerRadius: 8
                 }
             }
         }
     });
-};
+}
 
-const loadProfilesTable = () => {
+function loadProfilesTable() {
     const tbody = document.getElementById('profilesTableBody');
+    if (!tbody) return;
+    
     tbody.innerHTML = '';
+    
+    if (alumniData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 32px; color: #4a5568;">No alumni profiles found</td></tr>';
+        return;
+    }
     
     alumniData.forEach(alumni => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${alumni.name}</td>
+            <td><strong>${alumni.name}</strong></td>
             <td>${alumni.current_role}</td>
             <td>${alumni.current_company}</td>
-            <td>${alumni.functional_area}</td>
+            <td><span class="tag">${alumni.functional_area}</span></td>
             <td>${alumni.experience_years} years</td>
             <td>
                 <div class="action-buttons">
-                    <button class="action-btn action-btn--edit" onclick="editProfile(${alumni.id})">Edit</button>
-                    <button class="action-btn action-btn--delete" onclick="deleteProfile(${alumni.id})">Delete</button>
+                    <button class="action-btn action-btn--edit" onclick="editProfile(${alumni.id})" title="Edit Profile">Edit</button>
+                    <button class="action-btn action-btn--delete" onclick="deleteProfile(${alumni.id})" title="Delete Profile">Delete</button>
                 </div>
             </td>
         `;
         tbody.appendChild(row);
     });
-};
+}
 
-const loadRecruitersTable = () => {
+function loadRecruitersTable() {
     const tbody = document.getElementById('recruitersTableBody');
+    if (!tbody) return;
+    
     tbody.innerHTML = '';
+    
+    if (recruitersData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 32px; color: #4a5568;">No recruiters found</td></tr>';
+        return;
+    }
     
     recruitersData.forEach(recruiter => {
         const row = document.createElement('tr');
@@ -583,23 +688,23 @@ const loadRecruitersTable = () => {
                            recruiter.status === 'pending' ? 'status-badge--pending' : 'status-badge--inactive';
         
         row.innerHTML = `
-            <td>${recruiter.name}</td>
+            <td><strong>${recruiter.name}</strong></td>
             <td>${recruiter.email}</td>
             <td>${recruiter.company}</td>
             <td><span class="status-badge ${statusClass}">${recruiter.status.charAt(0).toUpperCase() + recruiter.status.slice(1)}</span></td>
             <td>
                 <div class="action-buttons">
-                    ${recruiter.status === 'pending' ? `<button class="action-btn action-btn--approve" onclick="approveRecruiter(${recruiter.id})">Approve</button>` : ''}
-                    <button class="action-btn action-btn--delete" onclick="deleteRecruiter(${recruiter.id})">Delete</button>
+                    ${recruiter.status === 'pending' ? `<button class="action-btn action-btn--approve" onclick="approveRecruiter(${recruiter.id})" title="Approve Recruiter">Approve</button>` : ''}
+                    <button class="action-btn action-btn--delete" onclick="deleteRecruiter(${recruiter.id})" title="Delete Recruiter">Delete</button>
                 </div>
             </td>
         `;
         tbody.appendChild(row);
     });
-};
+}
 
 // Recruiter Dashboard Functions
-window.showRecruiterSection = (sectionId) => {
+function showRecruiterSection(sectionId) {
     // Update navigation
     document.querySelectorAll('.recruiter-nav .nav-btn').forEach(btn => btn.classList.remove('active'));
     event.target.classList.add('active');
@@ -617,9 +722,12 @@ window.showRecruiterSection = (sectionId) => {
             loadShortlistedGrid();
             break;
     }
-};
+}
 
-const initializeRecruiterDashboard = () => {
+// Make showRecruiterSection globally available
+window.showRecruiterSection = showRecruiterSection;
+
+function initializeRecruiterDashboard() {
     populateFilters();
     
     // Set first nav button as active
@@ -635,15 +743,17 @@ const initializeRecruiterDashboard = () => {
     loadAlumniGrid();
     updateShortlistCount();
     attachFilterListeners();
-};
+}
 
-const populateFilters = () => {
+function populateFilters() {
     const functionalFilter = document.getElementById('functionalFilter');
     const industryFilter = document.getElementById('industryFilter');
     
+    if (!functionalFilter || !industryFilter) return;
+    
     // Populate functional areas
     const functionalAreas = [...new Set(alumniData.map(a => a.functional_area))].sort();
-    functionalFilter.innerHTML = '<option value="">All Areas</option>';
+    functionalFilter.innerHTML = '<option value="">All Functional Areas</option>';
     functionalAreas.forEach(area => {
         const option = document.createElement('option');
         option.value = area;
@@ -660,9 +770,9 @@ const populateFilters = () => {
         option.textContent = industry;
         industryFilter.appendChild(option);
     });
-};
+}
 
-const attachFilterListeners = () => {
+function attachFilterListeners() {
     const searchInput = document.getElementById('searchInput');
     const functionalFilter = document.getElementById('functionalFilter');
     const industryFilter = document.getElementById('industryFilter');
@@ -673,17 +783,30 @@ const attachFilterListeners = () => {
         loadAlumniGrid();
     };
     
-    searchInput.addEventListener('input', applyFilters);
-    functionalFilter.addEventListener('change', applyFilters);
-    industryFilter.addEventListener('change', applyFilters);
-    experienceFilter.addEventListener('change', applyFilters);
-};
+    // Debounce search input
+    let searchTimeout;
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(applyFilters, 300);
+        });
+    }
+    
+    if (functionalFilter) functionalFilter.addEventListener('change', applyFilters);
+    if (industryFilter) industryFilter.addEventListener('change', applyFilters);
+    if (experienceFilter) experienceFilter.addEventListener('change', applyFilters);
+}
 
-const filterAlumni = () => {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const functionalArea = document.getElementById('functionalFilter').value;
-    const industry = document.getElementById('industryFilter').value;
-    const experienceLevel = document.getElementById('experienceFilter').value;
+function filterAlumni() {
+    const searchInput = document.getElementById('searchInput');
+    const functionalFilter = document.getElementById('functionalFilter');
+    const industryFilter = document.getElementById('industryFilter');
+    const experienceFilter = document.getElementById('experienceFilter');
+    
+    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const functionalArea = functionalFilter ? functionalFilter.value : '';
+    const industry = industryFilter ? industryFilter.value : '';
+    const experienceLevel = experienceFilter ? experienceFilter.value : '';
     
     filteredAlumni = alumniData.filter(alumni => {
         // Search filter
@@ -692,7 +815,8 @@ const filterAlumni = () => {
             alumni.current_company.toLowerCase().includes(searchTerm) ||
             alumni.current_role.toLowerCase().includes(searchTerm) ||
             alumni.key_skills.some(skill => skill.toLowerCase().includes(searchTerm)) ||
-            alumni.industry.toLowerCase().includes(searchTerm);
+            alumni.industry.toLowerCase().includes(searchTerm) ||
+            alumni.summary.toLowerCase().includes(searchTerm);
         
         // Functional area filter
         const matchesFunctional = !functionalArea || alumni.functional_area === functionalArea;
@@ -716,26 +840,48 @@ const filterAlumni = () => {
     });
     
     // Update results count
-    document.getElementById('resultsCount').textContent = filteredAlumni.length;
-};
+    const resultsCountEl = document.getElementById('resultsCount');
+    if (resultsCountEl) {
+        resultsCountEl.textContent = filteredAlumni.length;
+    }
+}
 
-window.clearFilters = () => {
-    document.getElementById('searchInput').value = '';
-    document.getElementById('functionalFilter').value = '';
-    document.getElementById('industryFilter').value = '';
-    document.getElementById('experienceFilter').value = '';
+function clearFilters() {
+    const searchInput = document.getElementById('searchInput');
+    const functionalFilter = document.getElementById('functionalFilter');
+    const industryFilter = document.getElementById('industryFilter');
+    const experienceFilter = document.getElementById('experienceFilter');
+    
+    if (searchInput) searchInput.value = '';
+    if (functionalFilter) functionalFilter.value = '';
+    if (industryFilter) industryFilter.value = '';
+    if (experienceFilter) experienceFilter.value = '';
     
     filteredAlumni = [...alumniData];
     loadAlumniGrid();
-    document.getElementById('resultsCount').textContent = filteredAlumni.length;
-};
+    
+    const resultsCountEl = document.getElementById('resultsCount');
+    if (resultsCountEl) {
+        resultsCountEl.textContent = filteredAlumni.length;
+    }
+}
 
-const loadAlumniGrid = () => {
+// Make clearFilters globally available
+window.clearFilters = clearFilters;
+
+function loadAlumniGrid() {
     const grid = document.getElementById('alumniGrid');
+    if (!grid) return;
+    
     grid.innerHTML = '';
     
     if (filteredAlumni.length === 0) {
-        grid.innerHTML = '<div class="empty-state"><h3>No alumni found</h3><p>Try adjusting your search filters</p></div>';
+        grid.innerHTML = `
+            <div class="empty-state">
+                <h3>No alumni profiles found</h3>
+                <p>Try adjusting your search filters or search terms to find more candidates.</p>
+            </div>
+        `;
         return;
     }
     
@@ -743,16 +889,23 @@ const loadAlumniGrid = () => {
         const card = createAlumniCard(alumni);
         grid.appendChild(card);
     });
-};
+}
 
-const loadShortlistedGrid = () => {
+function loadShortlistedGrid() {
     const grid = document.getElementById('shortlistGrid');
+    if (!grid) return;
+    
     grid.innerHTML = '';
     
     const shortlisted = alumniData.filter(alumni => shortlistedCandidates.has(alumni.id));
     
     if (shortlisted.length === 0) {
-        grid.innerHTML = '<div class="empty-state"><h3>No shortlisted candidates</h3><p>Start browsing alumni profiles and shortlist candidates you\'re interested in</p></div>';
+        grid.innerHTML = `
+            <div class="empty-state">
+                <h3>No shortlisted candidates</h3>
+                <p>Start browsing alumni profiles and shortlist candidates you're interested in recruiting.</p>
+            </div>
+        `;
         return;
     }
     
@@ -760,9 +913,9 @@ const loadShortlistedGrid = () => {
         const card = createAlumniCard(alumni, true);
         grid.appendChild(card);
     });
-};
+}
 
-const createAlumniCard = (alumni, isShortlisted = false) => {
+function createAlumniCard(alumni, isShortlisted = false) {
     const card = document.createElement('div');
     card.className = 'alumni-card';
     
@@ -778,7 +931,7 @@ const createAlumniCard = (alumni, isShortlisted = false) => {
                 <p class="alumni-role">${alumni.current_role}</p>
                 <p class="alumni-company">${alumni.current_company}</p>
             </div>
-            <button class="shortlist-btn ${isInShortlist ? 'active' : ''}" onclick="toggleShortlist(${alumni.id})">
+            <button class="shortlist-btn ${isInShortlist ? 'active' : ''}" onclick="toggleShortlist(${alumni.id})" title="${isInShortlist ? 'Remove from shortlist' : 'Add to shortlist'}">
                 ${isInShortlist ? '★ Shortlisted' : '☆ Shortlist'}
             </button>
         </div>
@@ -802,15 +955,15 @@ const createAlumniCard = (alumni, isShortlisted = false) => {
     `;
     
     card.addEventListener('click', (e) => {
-        if (!e.target.classList.contains('shortlist-btn')) {
+        if (!e.target.classList.contains('shortlist-btn') && !e.target.closest('.shortlist-btn')) {
             showProfileDetail(alumni);
         }
     });
     
     return card;
-};
+}
 
-window.toggleShortlist = (alumniId) => {
+function toggleShortlist(alumniId) {
     if (shortlistedCandidates.has(alumniId)) {
         shortlistedCandidates.delete(alumniId);
     } else {
@@ -827,28 +980,38 @@ window.toggleShortlist = (alumniId) => {
         if (alumni && shortlistedCandidates.has(alumni.id)) {
             btn.classList.add('active');
             btn.textContent = '★ Shortlisted';
+            btn.title = 'Remove from shortlist';
         } else if (alumni) {
             btn.classList.remove('active');
             btn.textContent = '☆ Shortlist';
+            btn.title = 'Add to shortlist';
         }
     });
     
     // If we're in the shortlisted section, reload the grid
-    if (document.getElementById('recruiterShortlistSection').classList.contains('active')) {
+    if (document.getElementById('recruiterShortlistSection') && document.getElementById('recruiterShortlistSection').classList.contains('active')) {
         loadShortlistedGrid();
     }
-};
+}
 
-const updateShortlistCount = () => {
-    document.getElementById('shortlistCount').textContent = shortlistedCandidates.size;
-};
+// Make toggleShortlist globally available
+window.toggleShortlist = toggleShortlist;
 
-const showProfileDetail = (alumni) => {
+function updateShortlistCount() {
+    const shortlistCountEl = document.getElementById('shortlistCount');
+    if (shortlistCountEl) {
+        shortlistCountEl.textContent = shortlistedCandidates.size;
+    }
+}
+
+function showProfileDetail(alumni) {
     const modal = document.getElementById('profileModal');
     const title = document.getElementById('profileModalTitle');
     const details = document.getElementById('profileDetails');
     
-    title.textContent = `${alumni.name} - Profile Details`;
+    if (!modal || !title || !details) return;
+    
+    title.textContent = `${alumni.name} - IIM Ahmedabad AGMP Alumni`;
     
     const isRecruiter = currentUser && currentUser.type === 'recruiter';
     
@@ -878,14 +1041,14 @@ const showProfileDetail = (alumni) => {
             
             <div class="profile-section">
                 <h4>Experience & Education</h4>
-                <p><strong>Experience:</strong> ${alumni.experience_years} years</p>
+                <p><strong>Total Experience:</strong> ${alumni.experience_years} years</p>
                 <p><strong>Functional Area:</strong> ${alumni.functional_area}</p>
-                <p><strong>Industry:</strong> ${alumni.industry}</p>
-                <p><strong>Education:</strong> ${alumni.education}</p>
+                <p><strong>Industry Sector:</strong> ${alumni.industry}</p>
+                <p><strong>Educational Background:</strong> ${alumni.education}</p>
             </div>
             
             <div class="profile-section">
-                <h4>Key Skills</h4>
+                <h4>Core Competencies</h4>
                 <ul class="skills-list">
                     ${alumni.key_skills.map(skill => `<li>${skill}</li>`).join('')}
                 </ul>
@@ -899,7 +1062,7 @@ const showProfileDetail = (alumni) => {
             </div>
             
             <div class="profile-section">
-                <h4>Seeking Roles</h4>
+                <h4>Seeking Opportunities</h4>
                 <ul class="skills-list">
                     ${alumni.seeking_roles.map(role => `<li>${role}</li>`).join('')}
                 </ul>
@@ -908,72 +1071,139 @@ const showProfileDetail = (alumni) => {
     `;
     
     modal.classList.remove('hidden');
-};
+}
 
 // CRUD Operations for Admin
-window.showAddProfileModal = () => {
-    document.getElementById('profileFormTitle').textContent = 'Add Alumni Profile';
-    document.getElementById('profileForm').reset();
-    document.getElementById('profileFormModal').classList.remove('hidden');
-};
-
-window.editProfile = (id) => {
-    const alumni = alumniData.find(a => a.id === id);
-    if (!alumni) return;
+function showAddProfileModal() {
+    const titleEl = document.getElementById('profileFormTitle');
+    const formEl = document.getElementById('profileForm');
+    const modalEl = document.getElementById('profileFormModal');
     
-    document.getElementById('profileFormTitle').textContent = 'Edit Alumni Profile';
+    if (titleEl) titleEl.textContent = 'Add AGMP Alumni Profile';
+    if (formEl) {
+        formEl.reset();
+        delete formEl.dataset.editId;
+    }
+    if (modalEl) modalEl.classList.remove('hidden');
+}
+
+// Make showAddProfileModal globally available
+window.showAddProfileModal = showAddProfileModal;
+
+function editProfile(id) {
+    const alumni = alumniData.find(a => a.id === id);
+    if (!alumni) {
+        alert('Alumni profile not found.');
+        return;
+    }
+    
+    const titleEl = document.getElementById('profileFormTitle');
+    if (titleEl) titleEl.textContent = 'Edit AGMP Alumni Profile';
     
     // Populate form fields
-    document.getElementById('profileName').value = alumni.name;
-    document.getElementById('profileEmail').value = alumni.email;
-    document.getElementById('profilePhone').value = alumni.phone;
-    document.getElementById('profileEducation').value = alumni.education;
-    document.getElementById('profileRole').value = alumni.current_role;
-    document.getElementById('profileCompany').value = alumni.current_company;
-    document.getElementById('profileExperience').value = alumni.experience_years;
-    document.getElementById('profileFunctional').value = alumni.functional_area;
-    document.getElementById('profileIndustry').value = alumni.industry;
-    document.getElementById('profileLocation').value = alumni.location;
-    document.getElementById('profileSummary').value = alumni.summary;
-    document.getElementById('profileSkills').value = alumni.key_skills.join(', ');
-    document.getElementById('profileAchievements').value = alumni.achievements.join(', ');
+    const fields = {
+        'profileName': alumni.name,
+        'profileEmail': alumni.email,
+        'profilePhone': alumni.phone,
+        'profileEducation': alumni.education,
+        'profileRole': alumni.current_role,
+        'profileCompany': alumni.current_company,
+        'profileExperience': alumni.experience_years,
+        'profileFunctional': alumni.functional_area,
+        'profileIndustry': alumni.industry,
+        'profileLocation': alumni.location,
+        'profileSummary': alumni.summary,
+        'profileSkills': alumni.key_skills ? alumni.key_skills.join(', ') : '',
+        'profileAchievements': alumni.achievements ? alumni.achievements.join(', ') : ''
+    };
+    
+    Object.keys(fields).forEach(fieldId => {
+        const element = document.getElementById(fieldId);
+        if (element) {
+            element.value = fields[fieldId] || '';
+        }
+    });
     
     // Store the ID for updating
-    document.getElementById('profileForm').dataset.editId = id;
+    const formEl = document.getElementById('profileForm');
+    if (formEl) formEl.dataset.editId = id;
     
-    document.getElementById('profileFormModal').classList.remove('hidden');
-};
+    const modalEl = document.getElementById('profileFormModal');
+    if (modalEl) modalEl.classList.remove('hidden');
+}
 
-window.deleteProfile = (id) => {
-    if (confirm('Are you sure you want to delete this profile?')) {
+// Make editProfile globally available
+window.editProfile = editProfile;
+
+function deleteProfile(id) {
+    const alumni = alumniData.find(a => a.id === id);
+    if (!alumni) {
+        alert('Alumni profile not found.');
+        return;
+    }
+    
+    if (confirm(`Are you sure you want to delete ${alumni.name}'s profile? This action cannot be undone.`)) {
         alumniData = alumniData.filter(a => a.id !== id);
+        filteredAlumni = filteredAlumni.filter(a => a.id !== id);
+        
         loadProfilesTable();
         loadDashboardStats();
-        loadCharts();
+        setTimeout(loadCharts, 100);
+        
+        // Update recruiter dashboard if needed
+        if (currentUser && currentUser.type === 'recruiter') {
+            loadAlumniGrid();
+            updateShortlistCount();
+        }
     }
-};
+}
 
-const handleProfileForm = (e) => {
+// Make deleteProfile globally available
+window.deleteProfile = deleteProfile;
+
+function handleProfileForm(e) {
     e.preventDefault();
     
+    // Validate required fields
+    const nameEl = document.getElementById('profileName');
+    const emailEl = document.getElementById('profileEmail');
+    const roleEl = document.getElementById('profileRole');
+    const companyEl = document.getElementById('profileCompany');
+    
+    const name = nameEl ? nameEl.value.trim() : '';
+    const email = emailEl ? emailEl.value.trim() : '';
+    const role = roleEl ? roleEl.value.trim() : '';
+    const company = companyEl ? companyEl.value.trim() : '';
+    
+    if (!name || !email || !role || !company) {
+        alert('Please fill in all required fields.');
+        return;
+    }
+    
+    const getFieldValue = (id, defaultValue = '') => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : defaultValue;
+    };
+    
     const formData = {
-        name: document.getElementById('profileName').value,
-        email: document.getElementById('profileEmail').value,
-        phone: document.getElementById('profilePhone').value,
-        education: document.getElementById('profileEducation').value,
-        current_role: document.getElementById('profileRole').value,
-        current_company: document.getElementById('profileCompany').value,
-        experience_years: parseInt(document.getElementById('profileExperience').value) || 0,
-        functional_area: document.getElementById('profileFunctional').value,
-        industry: document.getElementById('profileIndustry').value,
-        location: document.getElementById('profileLocation').value,
-        summary: document.getElementById('profileSummary').value,
-        key_skills: document.getElementById('profileSkills').value.split(',').map(s => s.trim()).filter(s => s),
-        achievements: document.getElementById('profileAchievements').value.split(',').map(s => s.trim()).filter(s => s),
+        name: name,
+        email: email,
+        phone: getFieldValue('profilePhone') || '+91 XXXX XXXX XX',
+        education: getFieldValue('profileEducation'),
+        current_role: role,
+        current_company: company,
+        experience_years: parseInt(getFieldValue('profileExperience')) || 0,
+        functional_area: getFieldValue('profileFunctional'),
+        industry: getFieldValue('profileIndustry'),
+        location: getFieldValue('profileLocation') || 'India',
+        summary: getFieldValue('profileSummary'),
+        key_skills: getFieldValue('profileSkills').split(',').map(s => s.trim()).filter(s => s),
+        achievements: getFieldValue('profileAchievements').split(',').map(s => s.trim()).filter(s => s),
         seeking_roles: []
     };
     
-    const editId = document.getElementById('profileForm').dataset.editId;
+    const formEl = document.getElementById('profileForm');
+    const editId = formEl ? formEl.dataset.editId : null;
     
     if (editId) {
         // Update existing profile
@@ -981,34 +1211,64 @@ const handleProfileForm = (e) => {
         if (index !== -1) {
             alumniData[index] = { ...alumniData[index], ...formData };
         }
-        delete document.getElementById('profileForm').dataset.editId;
+        if (formEl) delete formEl.dataset.editId;
     } else {
         // Add new profile
-        const newId = Math.max(...alumniData.map(a => a.id)) + 1;
+        const newId = alumniData.length > 0 ? Math.max(...alumniData.map(a => a.id)) + 1 : 1;
         alumniData.push({ id: newId, ...formData });
     }
+    
+    // Update filtered alumni
+    filteredAlumni = [...alumniData];
     
     closeModal();
     loadProfilesTable();
     loadDashboardStats();
-    loadCharts();
-};
+    setTimeout(loadCharts, 100);
+}
 
-window.showAddRecruiterModal = () => {
-    document.getElementById('recruiterForm').reset();
-    document.getElementById('recruiterFormModal').classList.remove('hidden');
-};
+function showAddRecruiterModal() {
+    const formEl = document.getElementById('recruiterForm');
+    const modalEl = document.getElementById('recruiterFormModal');
+    
+    if (formEl) formEl.reset();
+    if (modalEl) modalEl.classList.remove('hidden');
+}
 
-const handleRecruiterForm = (e) => {
+// Make showAddRecruiterModal globally available
+window.showAddRecruiterModal = showAddRecruiterModal;
+
+function handleRecruiterForm(e) {
     e.preventDefault();
     
-    const newId = Math.max(...recruitersData.map(r => r.id)) + 1;
+    const getFieldValue = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : '';
+    };
+    
+    const name = getFieldValue('recruiterName');
+    const email = getFieldValue('recruiterEmail');
+    const company = getFieldValue('recruiterCompany');
+    const password = getFieldValue('recruiterPassword');
+    
+    if (!name || !email || !company || !password) {
+        alert('Please fill in all required fields.');
+        return;
+    }
+    
+    // Check if email already exists
+    if (recruitersData.some(r => r.email === email)) {
+        alert('A recruiter with this email already exists.');
+        return;
+    }
+    
+    const newId = recruitersData.length > 0 ? Math.max(...recruitersData.map(r => r.id)) + 1 : 1;
     const recruiter = {
         id: newId,
-        name: document.getElementById('recruiterName').value,
-        email: document.getElementById('recruiterEmail').value,
-        company: document.getElementById('recruiterCompany').value,
-        password: document.getElementById('recruiterPassword').value,
+        name: name,
+        email: email,
+        company: company,
+        password: password,
         status: 'active'
     };
     
@@ -1016,98 +1276,141 @@ const handleRecruiterForm = (e) => {
     closeModal();
     loadRecruitersTable();
     loadDashboardStats();
-};
+}
 
-window.approveRecruiter = (id) => {
+function approveRecruiter(id) {
     const recruiter = recruitersData.find(r => r.id === id);
     if (recruiter) {
         recruiter.status = 'active';
         loadRecruitersTable();
         loadDashboardStats();
     }
-};
+}
 
-window.deleteRecruiter = (id) => {
-    if (confirm('Are you sure you want to delete this recruiter?')) {
+// Make approveRecruiter globally available
+window.approveRecruiter = approveRecruiter;
+
+function deleteRecruiter(id) {
+    const recruiter = recruitersData.find(r => r.id === id);
+    if (!recruiter) {
+        alert('Recruiter not found.');
+        return;
+    }
+    
+    if (confirm(`Are you sure you want to delete ${recruiter.name}'s account? This action cannot be undone.`)) {
         recruitersData = recruitersData.filter(r => r.id !== id);
         loadRecruitersTable();
         loadDashboardStats();
     }
-};
+}
+
+// Make deleteRecruiter globally available
+window.deleteRecruiter = deleteRecruiter;
 
 // Export Functions
-window.exportResults = () => {
-    const data = filteredAlumni.map(alumni => ({
-        Name: alumni.name,
-        Email: alumni.email,
-        'Current Role': alumni.current_role,
-        'Current Company': alumni.current_company,
-        'Experience (Years)': alumni.experience_years,
-        'Functional Area': alumni.functional_area,
-        Industry: alumni.industry,
-        Location: alumni.location,
-        'Key Skills': alumni.key_skills.join('; ')
-    }));
-    
-    downloadCSV(data, 'alumni_search_results.csv');
-};
-
-window.exportShortlist = () => {
-    const shortlisted = alumniData.filter(alumni => shortlistedCandidates.has(alumni.id));
-    const data = shortlisted.map(alumni => ({
-        Name: alumni.name,
-        Email: alumni.email,
-        Phone: alumni.phone,
-        'Current Role': alumni.current_role,
-        'Current Company': alumni.current_company,
-        'Experience (Years)': alumni.experience_years,
-        'Functional Area': alumni.functional_area,
-        Industry: alumni.industry,
-        Location: alumni.location,
-        'Key Skills': alumni.key_skills.join('; '),
-        'Key Achievements': alumni.achievements.join('; ')
-    }));
-    
-    downloadCSV(data, 'shortlisted_candidates.csv');
-};
-
-const downloadCSV = (data, filename) => {
-    if (data.length === 0) {
-        alert('No data to export');
+function exportResults() {
+    if (filteredAlumni.length === 0) {
+        alert('No data to export. Please adjust your search filters.');
         return;
     }
     
+    const data = filteredAlumni.map(alumni => ({
+        'Name': alumni.name,
+        'Email': alumni.email,
+        'Current Role': alumni.current_role,
+        'Current Company': alumni.current_company,
+        'Experience (Years)': alumni.experience_years,
+        'Functional Area': alumni.functional_area,
+        'Industry': alumni.industry,
+        'Location': alumni.location,
+        'Key Skills': alumni.key_skills.join('; '),
+        'Summary': alumni.summary
+    }));
+    
+    downloadCSV(data, 'iima_agmp_alumni_search_results.csv');
+}
+
+// Make exportResults globally available
+window.exportResults = exportResults;
+
+function exportShortlist() {
+    const shortlisted = alumniData.filter(alumni => shortlistedCandidates.has(alumni.id));
+    
+    if (shortlisted.length === 0) {
+        alert('No shortlisted candidates to export.');
+        return;
+    }
+    
+    const data = shortlisted.map(alumni => ({
+        'Name': alumni.name,
+        'Email': alumni.email,
+        'Phone': alumni.phone,
+        'Current Role': alumni.current_role,
+        'Current Company': alumni.current_company,
+        'Experience (Years)': alumni.experience_years,
+        'Functional Area': alumni.functional_area,
+        'Industry': alumni.industry,
+        'Location': alumni.location,
+        'Key Skills': alumni.key_skills.join('; '),
+        'Key Achievements': alumni.achievements.join('; '),
+        'Professional Summary': alumni.summary
+    }));
+    
+    downloadCSV(data, 'iima_agmp_shortlisted_candidates.csv');
+}
+
+// Make exportShortlist globally available
+window.exportShortlist = exportShortlist;
+
+function downloadCSV(data, filename) {
     const headers = Object.keys(data[0]);
     const csvContent = [
         headers.join(','),
-        ...data.map(row => headers.map(header => `"${row[header] || ''}"`).join(','))
+        ...data.map(row => headers.map(header => {
+            const value = row[header] || '';
+            return `"${value.toString().replace(/"/g, '""')}"`;
+        }).join(','))
     ].join('\n');
     
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-};
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    
+    if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM Content Loaded'); // Debug log
+    
     initializeData();
     
     // Login form
-    document.getElementById('loginForm').addEventListener('submit', handleLogin);
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', handleLogin);
+    }
     
     // Profile form
-    document.getElementById('profileForm').addEventListener('submit', handleProfileForm);
+    const profileForm = document.getElementById('profileForm');
+    if (profileForm) {
+        profileForm.addEventListener('submit', handleProfileForm);
+    }
     
     // Recruiter form
-    document.getElementById('recruiterForm').addEventListener('submit', handleRecruiterForm);
+    const recruiterForm = document.getElementById('recruiterForm');
+    if (recruiterForm) {
+        recruiterForm.addEventListener('submit', handleRecruiterForm);
+    }
     
-    // Close modals on click outside - fixed to prevent closing when clicking inside modal content
+    // Close modals on background click
     document.querySelectorAll('.modal').forEach(modal => {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
@@ -1124,7 +1427,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     // Set initial results count
-    if (document.getElementById('resultsCount')) {
-        document.getElementById('resultsCount').textContent = alumniData.length;
+    const resultsCount = document.getElementById('resultsCount');
+    if (resultsCount) {
+        resultsCount.textContent = alumniData.length;
     }
+    
+    // Initialize filtered alumni
+    filteredAlumni = [...alumniData];
+    
+    console.log('Initialization complete'); // Debug log
 });
