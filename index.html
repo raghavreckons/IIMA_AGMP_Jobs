@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGMP IIMA Alumni Recruitment Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Landing Page -->
+    <div id="landingPage" class="page active">
+        <header class="landing-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <h1>IIM Ahmedabad</h1>
+                        <h2>AGMP Alumni Recruitment Platform</h2>
+                        <p>Connecting exceptional AGMP graduates with leading organizations</p>
+                    </div>
+                    <div class="login-options">
+                        <button class="btn btn--primary" onclick="showLogin('admin')">Admin Login</button>
+                        <button class="btn btn--outline" onclick="showLogin('recruiter')">Recruiter Login</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <h3>About AGMP Alumni Platform</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>Verified Profiles</h4>
+                            <p>Authenticated profiles of accomplished AGMP graduates with diverse industry experience</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>Advanced Search</h4>
+                            <p>Filter candidates by functional area, industry, experience level, and key skills</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>Curated Database</h4>
+                            <p>Access to high-caliber professionals from India's premier management program</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>Streamlined Process</h4>
+                            <p>Efficient recruitment process designed specifically for AGMP alumni placement</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="landing-footer">
+            <div class="container">
+                <p>&copy; 2025 IIM Ahmedabad. All rights reserved. | <a href="#contact">Contact Us</a> | <a href="#help">Help</a></p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="loginTitle">Login</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="loginEmail" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" id="loginPassword" class="form-control" required>
+                    </div>
+                    <div class="demo-credentials">
+                        <p><strong>Demo Credentials:</strong></p>
+                        <p id="demoCredentials"></p>
+                    </div>
+                    <button type="submit" class="btn btn--primary btn--full-width">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="page hidden">
+        <nav class="admin-nav">
+            <div class="nav-brand">
+                <h2>AGMP Admin Panel</h2>
+            </div>
+            <div class="nav-menu">
+                <button class="nav-btn active" onclick="showAdminSection('dashboard')">Dashboard</button>
+                <button class="nav-btn" onclick="showAdminSection('profiles')">Alumni Profiles</button>
+                <button class="nav-btn" onclick="showAdminSection('recruiters')">Recruiters</button>
+                <button class="nav-btn" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+
+        <main class="admin-main">
+            <!-- Dashboard Section -->
+            <div id="adminDashboardSection" class="admin-section active">
+                <div class="section-header">
+                    <h2>Dashboard Overview</h2>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="totalAlumni">16</h3>
+                        <p>Total Alumni</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="totalRecruiters">5</h3>
+                        <p>Active Recruiters</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="totalFunctions">9</h3>
+                        <p>Functional Areas</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="totalIndustries">15</h3>
+                        <p>Industries</p>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Distribution by Functional Area</h3>
+                        <div style="position: relative; height: 400px;">
+                            <canvas id="functionalChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Experience Level Distribution</h3>
+                        <div style="position: relative; height: 400px;">
+                            <canvas id="experienceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alumni Profiles Section -->
+            <div id="adminProfilesSection" class="admin-section hidden">
+                <div class="section-header">
+                    <h2>Alumni Profile Management</h2>
+                    <button class="btn btn--primary" onclick="showAddProfileModal()">Add New Profile</button>
+                </div>
+                
+                <div class="profiles-table-container">
+                    <table class="profiles-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Current Role</th>
+                                <th>Company</th>
+                                <th>Functional Area</th>
+                                <th>Experience</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="profilesTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recruiters Section -->
+            <div id="adminRecruitersSection" class="admin-section hidden">
+                <div class="section-header">
+                    <h2>Recruiter Management</h2>
+                    <button class="btn btn--primary" onclick="showAddRecruiterModal()">Add New Recruiter</button>
+                </div>
+                
+                <div class="recruiters-table-container">
+                    <table class="recruiters-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Company</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recruitersTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Recruiter Dashboard -->
+    <div id="recruiterDashboard" class="page hidden">
+        <nav class="recruiter-nav">
+            <div class="nav-brand">
+                <h2>AGMP Alumni Portal</h2>
+            </div>
+            <div class="nav-menu">
+                <button class="nav-btn active" onclick="showRecruiterSection('browse')">Browse Alumni</button>
+                <button class="nav-btn" onclick="showRecruiterSection('shortlisted')">Shortlisted (<span id="shortlistCount">0</span>)</button>
+                <button class="nav-btn" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+
+        <main class="recruiter-main">
+            <!-- Browse Alumni Section -->
+            <div id="recruiterBrowseSection" class="recruiter-section active">
+                <div class="section-header">
+                    <h2>Browse Alumni Profiles</h2>
+                </div>
+
+                <div class="search-filters">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label class="form-label">Search</label>
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search by name, company, or skills...">
+                        </div>
+                        <div class="filter-group">
+                            <label class="form-label">Functional Area</label>
+                            <select id="functionalFilter" class="form-control">
+                                <option value="">All Areas</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="form-label">Industry</label>
+                            <select id="industryFilter" class="form-control">
+                                <option value="">All Industries</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="form-label">Experience</label>
+                            <select id="experienceFilter" class="form-control">
+                                <option value="">All Levels</option>
+                                <option value="0-5">0-5 years</option>
+                                <option value="5-10">5-10 years</option>
+                                <option value="10+">10+ years</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn btn--outline" onclick="clearFilters()">Clear Filters</button>
+                        <button class="btn btn--secondary" onclick="exportResults()">Export Results</button>
+                    </div>
+                </div>
+
+                <div class="results-info">
+                    <p>Showing <span id="resultsCount">0</span> alumni profiles</p>
+                </div>
+
+                <div id="alumniGrid" class="alumni-grid">
+                </div>
+            </div>
+
+            <!-- Shortlisted Section -->
+            <div id="recruiterShortlistSection" class="recruiter-section hidden">
+                <div class="section-header">
+                    <h2>Shortlisted Candidates</h2>
+                    <button class="btn btn--secondary" onclick="exportShortlist()">Export Shortlist</button>
+                </div>
+                <div id="shortlistGrid" class="alumni-grid">
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Profile Detail Modal -->
+    <div id="profileModal" class="modal hidden">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="profileModalTitle">Alumni Profile</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="profileDetails"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Profile Modal -->
+    <div id="profileFormModal" class="modal hidden">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="profileFormTitle">Add Alumni Profile</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="profileForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Full Name *</label>
+                            <input type="text" id="profileName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email *</label>
+                            <input type="email" id="profileEmail" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" id="profilePhone" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Education</label>
+                            <input type="text" id="profileEducation" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Current Role *</label>
+                            <input type="text" id="profileRole" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Current Company *</label>
+                            <input type="text" id="profileCompany" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Experience (Years)</label>
+                            <input type="number" id="profileExperience" class="form-control" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Functional Area</label>
+                            <select id="profileFunctional" class="form-control">
+                                <option value="Strategy & Consulting">Strategy & Consulting</option>
+                                <option value="Operations & Manufacturing">Operations & Manufacturing</option>
+                                <option value="Project Management">Project Management</option>
+                                <option value="Finance">Finance</option>
+                                <option value="HRM">HRM</option>
+                                <option value="Product Management">Product Management</option>
+                                <option value="Sales & Marketing">Sales & Marketing</option>
+                                <option value="IT/ITES/Software">IT/ITES/Software</option>
+                                <option value="Scientist/R&D">Scientist/R&D</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Industry</label>
+                            <input type="text" id="profileIndustry" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Location</label>
+                            <input type="text" id="profileLocation" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Summary</label>
+                        <textarea id="profileSummary" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Key Skills (comma separated)</label>
+                        <textarea id="profileSkills" class="form-control" rows="2" placeholder="Skill 1, Skill 2, Skill 3..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Key Achievements (comma separated)</label>
+                        <textarea id="profileAchievements" class="form-control" rows="2" placeholder="Achievement 1, Achievement 2..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn--outline" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn--primary">Save Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Recruiter Modal -->
+    <div id="recruiterFormModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Recruiter</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="recruiterForm">
+                    <div class="form-group">
+                        <label class="form-label">Full Name *</label>
+                        <input type="text" id="recruiterName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email *</label>
+                        <input type="email" id="recruiterEmail" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Company *</label>
+                        <input type="text" id="recruiterCompany" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password *</label>
+                        <input type="password" id="recruiterPassword" class="form-control" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn--outline" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn--primary">Add Recruiter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
