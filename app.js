@@ -8,281 +8,16 @@ let filteredAlumni = [];
 
 // Demo data initialization with IIM Ahmedabad alumni data
 const initializeData = () => {
-    // Initialize alumni data from provided JSON
-    alumniData = [
-        {
-            id: 1,
-            name: "Aakash Sant",
-            email: "agmpbl15.aakashs@iima.ac.in",
-            phone: "+91 XXXX XXXX XX",
-            education: "Master of Commerce (M.Com), Bachelor of Commerce (B.Com)",
-            current_role: "Head of Product and Strategy",
-            current_company: "Svatantra Micro Housing Finance Corporation Limited",
-            experience_years: 11,
-            functional_area: "Strategy & Consulting",
-            industry: "Financial Services",
-            location: "India",
-            summary: "Experienced business leader with over 11 years in affordable housing finance, currently heading Product and Strategy at Svatantra Micro Housing Finance Corporation Limited, driving growth, innovation, and financial inclusion.",
-            key_skills: ["Business Strategy", "Product Innovation", "Strategic Planning", "Product Documentation", "Go-to-Market Strategy", "P&L Management", "Digital Communication", "Regulatory Compliance", "Stakeholder Management", "Risk Management"],
-            achievements: ["Consistently delivered strong business growth by launching innovative products", "Expanded into new markets", "Enhanced operational efficiency", "Drove digital transformation", "Strengthened risk controls"],
-            seeking_roles: ["Chief Strategy Officer", "VP Product Strategy", "General Manager - Strategy"]
-        },
-        {
-            id: 2,
-            name: "Abhijeet Nishane",
-            email: "agmpbl15.abhijeetn@iima.ac.in",
-            phone: "+91 XXXX XXXX XX",
-            education: "Bachelor of Engineering in Mechanical",
-            current_role: "Head Production",
-            current_company: "Varroc Engineering Limited",
-            experience_years: 7,
-            functional_area: "Operations & Manufacturing",
-            industry: "Automotive",
-            location: "India",
-            summary: "Experienced Operations leader with a strong track record in operational excellence, cost optimisation in EV manufacturing, currently heading production at Varroc Engineering Limited.",
-            key_skills: ["Operations Management", "Business Management", "Lean Manufacturing", "Project Management", "EV Motors & Transmission", "Cost Optimization", "New Product Development", "CFT Leadership", "Risk Management"],
-            achievements: ["Improved plant variable cost from 6% to 4%", "Delivered ₹70 Cr monthly revenue under budgeted labor cost", "Led VAVE/CI projects saving ₹5.2 Cr annually", "Achieved EBITDA of 9.6% against 8% target"],
-            seeking_roles: ["Plant Manager", "Operations Director", "VP Operations"]
-        },
-        {
-            id: 3,
-            name: "Abhishek Kumar Jha",
-            email: "agmpbl15.abhishekkumarj@iima.ac.in",
-            phone: "+91 XXXX XXXX XX",
-            education: "B.Tech in Electrical Engineering from NIT Bhopal",
-            current_role: "Manager",
-            current_company: "Engineering Firm",
-            experience_years: 12,
-            functional_area: "Project Management",
-            industry: "Infrastructure",
-            location: "India",
-            summary: "Has experience of more than 12 years in project execution, which included liasoning with various Govt. agencies and executing work of 33 KV HT line",
-            key_skills: ["Project Management Skills", "Financial Planning & Monitoring", "Budgeting", "Liasoning", "Government Relations"],
-            achievements: ["Executed Projects worth more than $6 crores", "GRIHA 5 star rating building", "Commissioning of 33 KV HT line"],
-            seeking_roles: ["Project Director", "Senior Manager - Projects", "Program Manager"]
-        },
-        {
-            id: 4,
-            name: "Abhishek Singh Dabi",
-            email: "agmpbl15.abhisheks@iima.ac.in",
-            phone: "+91 XXXX XXXX XX",
-            education: "B.Tech - Applied Electronics & Instrumentation Engineering",
-            current_role: "Operations Leader",
-            current_company: "Truemeds",
-            experience_years: 10,
-            functional_area: "Operations & Manufacturing",
-            industry: "Health-tech/E-commerce",
-            location: "India",
-            summary: "Operations leader with 10+ years of experience scaling startups across sectors like health-tech, agri-tech, food-tech, and logistics.",
-            key_skills: ["Go-to-Market (GTM) Strategy", "Capacity Planning and Optimisation", "Operations Management", "Business Expansion", "Process Excellence", "Supply Chain Management", "Stakeholder Management"],
-            achievements: ["Led ops expansion across 17+ states at Truemeds", "Reduced cost per order from ₹55 to ₹40 through automation at Zepto", "Scaled fleet from 12K to 18K in 12 months", "Built and led a 30+ member team", "Scaled GMV to ₹120 Cr/year at Bijak"],
-            seeking_roles: ["COO", "VP Operations", "General Manager - Operations"]
-        },
-        {
-            id: 5,
-            name: "Ajay Dadhich",
-            email: "agmpbl15.ajayd@iima.ac.in",
-            phone: "+91 XXXX XXXX XX",
-            education: "MBA - Marketing & Sales",
-            current_role: "Associate Director",
-            current_company: "Pine Labs",
-            experience_years: 14,
-            functional_area: "Finance",
-            industry: "Fintech",
-            location: "India",
-            summary: "As an Associate Director at Pine Labs, brings over 14 years of expertise in Distribution, business planning, P&L management, and forecasting, with a focus on driving cost optimization and scaling revenue opportunities.",
-            key_skills: ["Business Planning", "Financial Modelling", "Revenue Management", "Distribution Strategy", "Sales Planning", "Product Lifecycle Management", "Budgeting", "Regulatory Alignment", "Partnership Development"],
-            achievements: ["Pivotal in growing CASA balances from 2,500 Cr to 4,000 Cr", "Launched innovative initiatives like Merchant Risk Framework", "Implemented Banking Correspondent program for UP Government"],
-            seeking_roles: ["VP Business Planning", "Director - Strategy", "Chief Business Officer"]
-        },
-        {
-            id: 6,
-            name: "Ameya Kulkarni",
-            email: "agmpbl15.ameyak@iima.ac.in",
-            phone: "+91 XXXX XXXX XX",
-            education: "PGDM – Operations Management, B.S. – Mechanical Engineering",
-            current_role: "Deputy Project Manager",
-            current_company: "EPCM Consulting",
-            experience_years: 6,
-            functional_area: "Project Management",
-            industry: "EPCM/Chemical",
-            location: "India",
-            summary: "Project Management professional with 6+ years in EPCM, blending engineering delivery with financial and commercial control, now transitioning into business development roles.",
-            key_skills: ["EPCM Delivery", "Project Scheduling", "Power BI Dashboards", "Contract/Risk Management", "Proposal Development", "Vendor & Interdisciplinary Coordination", "Project P&L", "Budgeting", "Billing & Cash Flow"],
-            achievements: ["Delivered ₹100–500 Mn EPCM projects", "Employee of the Month Award 2021", "Excellence Award 2024", "Team Performance Award 2025"],
-            seeking_roles: ["Senior Project Manager", "Business Development Manager", "Program Manager"]
-        },
-        {
-            id: 7,
-            name: "Chandrika Sarkar",
-            email: "agmpbl15.chandrikas@iima.ac.in",
-            phone: "+91 99753 08742",
-            education: "BE - Information Technology",
-            current_role: "Head of Human Resources",
-            current_company: "Muse Wearables",
-            experience_years: 18,
-            functional_area: "HRM",
-            industry: "Technology",
-            location: "India",
-            summary: "Seasoned HR and Talent Acquisition leader with over 18 years of experience across recruitment, compliance, learning, and strategic people operations.",
-            key_skills: ["Talent Acquisition", "HR Compliance", "Employee Engagement", "Statutory Regulations", "L&D", "Onboarding", "Competency Mapping", "Culture Building", "Stakeholder Management", "Performance Management"],
-            achievements: ["Led competency mapping to improve hiring accuracy", "Established Learning Lounges for continuous development", "Scaled startup from 25 to over 300 employees"],
-            seeking_roles: ["CHRO", "VP Human Resources", "Director - Talent & Culture"]
-        },
-        {
-            id: 8,
-            name: "Hardikkumar Joshi",
-            email: "agmpbl15.hardikkumarj@iima.ac.in",
-            phone: "+91 XXXX XXXX XX",
-            education: "PG Diploma in Business Administration Symbiosis Univ, B.E (Automobile Engineering)",
-            current_role: "Associate Director of Products",
-            current_company: "Perfios",
-            experience_years: 15,
-            functional_area: "Product Management",
-            industry: "Fintech",
-            location: "India",
-            summary: "Associate Director of Products with 14+ years of experience in the Fintech industry. Led scalable LOS platforms, payment systems, and core banking platform enhancements.",
-            key_skills: ["Strategic Product Leadership", "Product Strategy", "Monetization", "Revenue & P&L Management", "Product Lifecycle Management", "Platform and Ecosystem Building", "Data-driven Roadmap", "Customer Journey Mapping", "Financial Modelling"],
-            achievements: ["Led digital loan onboarding platform for 30+ FIs", "Cut onboarding time by 50%", "Enabled ₹100 Cr+ monthly disbursals", "Drove ₹18 Cr ARR uplift"],
-            seeking_roles: ["VP Product", "Chief Product Officer", "Head of Product Strategy"]
-        },
-        {
-            id: 9,
-            name: "Khushboo Sharma",
-            email: "agmpbl15.khushboos@iima.ac.in",
-            phone: "+91 95527 29088",
-            education: "PGDM - University of Mumbai, B.E. (Electronics) - University of Pune",
-            current_role: "Category Head - Smartphones",
-            current_company: "Lava",
-            experience_years: 10,
-            functional_area: "Product Management",
-            industry: "Consumer Electronics",
-            location: "India",
-            summary: "Seasoned product leader with strong background in digital product management and consumer experience, currently heading the Flagship smartphone category at Lava.",
-            key_skills: ["Product Management", "Consumer/Market Understanding", "User Experience", "Cross-Functional Collaboration", "Supply Chain Management", "Digital Innovation"],
-            achievements: ["Employee of the Month award twice at Havells", "Successfully delivered Super App crossing 1 million+ downloads", "Recognized for Rolls-Royce project cost savings"],
-            seeking_roles: ["VP Product", "Chief Product Officer", "Head of Consumer Products"]
-        },
-        {
-            id: 10,
-            name: "Gayathry Premkumar",
-            email: "agmpbl15.gayathryp@iima.ac.in",
-            phone: "+91 99947 71894",
-            education: "ICAgile - Product Management, B.Tech - 1st class Distinction",
-            current_role: "Senior Consultant",
-            current_company: "Big Four Consulting Firm",
-            experience_years: 10,
-            functional_area: "Strategy & Consulting",
-            industry: "Consulting",
-            location: "India",
-            summary: "Strategic leader with 10+ years in consulting, digital ops, and supply chain transformation. Drives high-impact programs using data insights across industries.",
-            key_skills: ["Digital Program Management", "Data-Driven Decision Making", "Supply Chain Strategy", "Product Ownership", "Business Analytics", "Stakeholder Management", "Agile Delivery"],
-            achievements: ["Spearheaded $0.75M digital transformation initiative", "Enhanced supply chain visibility", "Received national recognition for consulting excellence"],
-            seeking_roles: ["Partner - Strategy", "Director - Digital Transformation", "VP Strategy & Operations"]
-        },
-        {
-            id: 11,
-            name: "Dr. Nagarajan S",
-            email: "agmpbl15.nagarajans@iima.ac.in",
-            phone: "+91 XXXX XXXX XX",
-            education: "B.Tech (Hons), M.Tech (Design) & Ph.D. (Biomechanics), IIT Madras",
-            current_role: "Scientist E",
-            current_company: "DEBEL, DRDO",
-            experience_years: 18,
-            functional_area: "Scientist/R&D",
-            industry: "Defense/Research",
-            location: "India",
-            summary: "Senior scientist with 18 years dedicated to research and development of life support and augmentative systems, with aspiration to enhance societal impact.",
-            key_skills: ["Product Design and Development", "Technology Management", "Innovation Management", "Technology Forecasting", "Strategic Thinking", "Systems Engineering", "Quality and Reliability"],
-            achievements: ["Instrumental in conceptualization and design of life support systems", "Led augmentative exoskeleton systems development", "India's first augmentative exoskeleton system"],
-            seeking_roles: ["Chief Technology Officer", "VP R&D", "Director - Innovation"]
-        },
-        {
-            id: 12,
-            name: "Heena Arora",
-            email: "agmpbl15.heenaa@iima.ac.in",
-            phone: "+91 98116 17471",
-            education: "B.Sc. (Hons) Statistics - Hindu College, University of Delhi",
-            current_role: "Strategic Consulting Professional",
-            current_company: "Deloitte",
-            experience_years: 12,
-            functional_area: "Strategy & Consulting",
-            industry: "Professional Services",
-            location: "India",
-            summary: "Strategy professional at Deloitte, advising CXOs and ExCo members on GTM, Sales and Operational excellence. Leverages AI, automation, and data to drive strategic decisions.",
-            key_skills: ["Strategic Foresight", "Hypothesis-driven Problem Solving", "Business Model Innovation", "Data-driven Decision Making", "Stakeholder Management", "Digital Transformation"],
-            achievements: ["Top 3% at Deloitte South Asia with President's Award 2024", "12+ Live the dot, move the dot awards", "Delivered strategic outcomes integrating digital tools"],
-            seeking_roles: ["Principal - Strategy", "VP Strategy", "Chief Strategy Officer"]
-        },
-        {
-            id: 13,
-            name: "Nitesh Kumar Gupta",
-            email: "agmpbl15.niteshg@iima.ac.in",
-            phone: "+91 97119 87312",
-            education: "Electronics & Communication Engineering-M.D.U",
-            current_role: "Product Manager",
-            current_company: "Amazon/Nokia/Radisys",
-            experience_years: 17,
-            functional_area: "Product Management",
-            industry: "Telecom & Software",
-            location: "India",
-            summary: "Dynamic Product Leader with 17+ years comprehensive experience in Telecom & Software industries, driving global adoption of AI, EMS/NMS/OSS, and Cloud solutions.",
-            key_skills: ["Cross-Functional Team Leadership", "Pre-Sales & Bid Management", "Product & GTM Strategy", "AI/ML", "Wireless (5G/4G)", "Telco Cloud", "Network Management"],
-            achievements: ["Led €50–100M funnels", "Boosted NPS by 25%", "Closed multi-million-dollar deals with Tier-1 operators", "Pioneered automation solutions"],
-            seeking_roles: ["VP Product", "Chief Product Officer", "Head of Product Strategy"]
-        },
-        {
-            id: 14,
-            name: "Ranjit Bhilare",
-            email: "agmpbl15.ranjitb@iima.ac.in",
-            phone: "+91 XXXX XXXX XX",
-            education: "MBA, Mechanical Engineering",
-            current_role: "Assistant General Manager",
-            current_company: "Manufacturing Company",
-            experience_years: 15,
-            functional_area: "Operations & Manufacturing",
-            industry: "Manufacturing/Automotive",
-            location: "India",
-            summary: "15 years experience in managing end to end Supply Chain, Project Management, Digitisation, Strategies, Data Analytics across diverse industries.",
-            key_skills: ["Supply Chain Strategies", "Demand Forecasting", "Sales and Operations Planning", "Digitization - MRP, WMS, TMS", "Project Management", "Data Analysis and Modeling"],
-            achievements: ["Successfully led ERP implementation (SAP+D365)", "Business process Automation in SCM", "Delivered Defence Systems & Automotive Projects", "Cost reduction through Strategic Sourcing"],
-            seeking_roles: ["VP Supply Chain", "Chief Operations Officer", "General Manager - Operations"]
-        },
-        {
-            id: 15,
-            name: "Prachi Sharma",
-            email: "agmpbl15.prachis@iima.ac.in",
-            phone: "+91 XXXX XXXX XX",
-            education: "BE Electrical & Electronics Engineering - BIT Mesra",
-            current_role: "Senior Solution Consultant",
-            current_company: "Seclore",
-            experience_years: 6,
-            functional_area: "Sales & Marketing",
-            industry: "Cybersecurity/SaaS",
-            location: "India",
-            summary: "Expert in stakeholder engagement, cross-cultural collaboration, and driving innovative solutions. Seeking strategic roles in product-based companies.",
-            key_skills: ["Product Design", "Solution Consulting", "Project & Stakeholder Management", "Data & Cybersecurity", "BI & Analytics", "Compliance (GDPR, HIPAA, CCPA)"],
-            achievements: ["6 years of global experience in data security and analytics", "Led enterprise solutions and SaaS implementations", "Driving digital transformation initiatives"],
-            seeking_roles: ["VP Solutions", "Chief Technology Officer", "Head of Product Solutions"]
-        },
-        {
-            id: 16,
-            name: "Tanmay Kumar Pandey",
-            email: "agmpbl15.tanmayp@iima.ac.in",
-            phone: "+91 88934 74813",
-            education: "PMP (Training complete), B.Tech Computer Science",
-            current_role: "Senior Member Technical Staff",
-            current_company: "DuploCloud",
-            experience_years: 9,
-            functional_area: "IT/ITES/Software",
-            industry: "Cloud Technology",
-            location: "India",
-            summary: "Engineering leader and cloud architect with 9+ years building scalable, cloud-native platforms. Strong in backend development, infrastructure automation, and product-focused problem solving.",
-            key_skills: ["Cloud & Infrastructure", "AWS, Azure, Kubernetes", "DevOps & Security", "Backend Engineering", "AI & Automation", "Product & Leadership"],
-            achievements: ["Delivered $1M+ infra savings at DuploCloud", "Built automation and tools", "Migrated 1000+ SaaS apps", "Published author of CS textbook"],
-            seeking_roles: ["VP Engineering", "Chief Technology Officer", "Director - Cloud Architecture"]
-        }
-    ];
+    // Initialize alumni data from provided JSON , read the JSON file and assign it to alumniData it is in the same folder as this file. modify the code below to read the file
+    fetch('AGMP_BL15_structured.json') 
+        .then(response => response.json())
+        .then(data => {
+            alumniData = data;
+            console.log('Alumni data initialized:', alumniData);
+        })
+        .catch(error => {
+            console.error('Error loading alumni data:', error);
+        });
 
     // Initialize demo recruiters with professional organizations
     recruitersData = [
@@ -292,6 +27,7 @@ const initializeData = () => {
             email: "recruiter@company.com",
             password: "recruiter123",
             company: "McKinsey & Company",
+            designation: "Talent Acquisition Specialist",
             status: "active"
         },
         {
@@ -300,6 +36,7 @@ const initializeData = () => {
             email: "p.mehta@bcg.com",
             password: "priya123",
             company: "Boston Consulting Group",
+            designation: "HR Manager",
             status: "active"
         },
         {
@@ -308,6 +45,7 @@ const initializeData = () => {
             email: "a.sharma@deloitte.com",
             password: "amit123",
             company: "Deloitte Consulting",
+            designation: "Recruitment Coordinator",
             status: "pending"
         },
         {
@@ -316,6 +54,7 @@ const initializeData = () => {
             email: "neha@tcs.com",
             password: "neha123",
             company: "Tata Consultancy Services",
+            designation: "HR Manager",
             status: "active"
         },
         {
@@ -324,6 +63,7 @@ const initializeData = () => {
             email: "r.agarwal@infosys.com",
             password: "rohit123",
             company: "Infosys Limited",
+            designation: "Recruitment Lead",
             status: "inactive"
         }
     ];
@@ -691,6 +431,7 @@ function loadRecruitersTable() {
             <td><strong>${recruiter.name}</strong></td>
             <td>${recruiter.email}</td>
             <td>${recruiter.company}</td>
+            <td>${recruiter.designation}</td>
             <td><span class="status-badge ${statusClass}">${recruiter.status.charAt(0).toUpperCase() + recruiter.status.slice(1)}</span></td>
             <td>
                 <div class="action-buttons">
@@ -869,6 +610,10 @@ function clearFilters() {
 // Make clearFilters globally available
 window.clearFilters = clearFilters;
 
+initializeData();
+setTimeout(() => {
+    clearFilters();
+}, 500);
 function loadAlumniGrid() {
     const grid = document.getElementById('alumniGrid');
     if (!grid) return;
@@ -880,6 +625,7 @@ function loadAlumniGrid() {
             <div class="empty-state">
                 <h3>No alumni profiles found</h3>
                 <p>Try adjusting your search filters or search terms to find more candidates.</p>
+                <p>Click on clear filters to load all the profiles.</p>
             </div>
         `;
         return;
